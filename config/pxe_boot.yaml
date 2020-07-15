@@ -1,0 +1,5 @@
+parameters:
+    pxe_boot:
+
+        dirs:
+            root: 'resources'
