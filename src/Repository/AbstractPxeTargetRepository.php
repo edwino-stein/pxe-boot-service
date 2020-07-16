@@ -28,6 +28,22 @@ abstract class AbstractPxeTargetRepository
 
     protected function onSetup() : void {}
 
+    public function fetchAll() : array
+    {
+        $targets = [];
+        $dists = $this->getDists();
+
+        foreach ($dists as $d) {
+            $archs = $this->getArchs($d);
+            foreach ($archs as $a) {
+                $modes = $this->getBootModes($d, $a);
+                foreach ($modes as $m) $targets[] = $this->createModel($d, $a, $m);
+            }
+        }
+
+        return $targets;
+    }
+
     public function getDists() : array
     {
         $finder = $this->getResourceService()->getRepositoryFinder($this->getName());
