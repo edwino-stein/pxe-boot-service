@@ -2,12 +2,29 @@
 namespace App\Repository;
 
 use App\Service\PxeResourceService;
+use App\Model\PxeTargetModel;
 
 abstract class AbstractPxeTargetRepository
 {
     protected $pxe = null;
     protected $name = '';
     protected $cfg = null;
+
+    protected function createModel(string $dist, string $arch, string $mode) : PxeTargetModel
+    { return $this->setupModel(new PxeTargetModel($dist, $arch, $mode, $this)); }
+
+    protected function setupModel(PxeTargetModel $model) : PxeTargetModel
+    {
+        return $model->setLabel(self::encodeStr(
+            $this->getLabel(),
+            [
+                '{target}' => $this->name,
+                '{dist}' => $model->getDist(),
+                '{arch}' => $model->getArch(),
+                '{mode}' => $model->getMode()
+            ]
+        ));
+    }
 
     protected function onSetup() : void {}
 
