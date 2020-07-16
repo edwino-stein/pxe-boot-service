@@ -3,3 +3,11 @@ parameters:
 
         dirs:
             root: 'resources'
+            tools: 'tools'
+            media: 'media'
+
+        tools:
+            - 'memdisk'
+            - 'wimboot'
+
+        repositories:

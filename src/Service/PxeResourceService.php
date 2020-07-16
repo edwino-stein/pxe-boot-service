@@ -8,12 +8,16 @@ use Symfony\Component\Finder\Finder;
 
 use App\Exception\ToolOrRepositoryNotDefined;
 
+use App\Repository\AbstractPxeTargetRepository;
+
 class PxeResourceService
 {
     protected $publicPath = 'public';
     protected $rootDir = '';
+    protected $mediaDir = '';
 
     protected $tools = [];
+    protected $repositories = [];
 
     public function __construct(ContainerInterface $container)
     {
@@ -31,6 +35,43 @@ class PxeResourceService
             $config['dirs']['tools'],
             $basePath
         );
+
+        $this->mediaDir = $config['dirs']['media'];
+        $this->repositories = self::scanForRepositories($config['repositories'], $this->mediaDir, $basePath);
+    }
+
+    public function getRepository(string $repository) : AbstractPxeTargetRepository
+    {
+        if(!$this->hasRepostory($repository)){
+            throw new ToolOrRepositoryNotDefined($repository);
+        }
+
+        return AbstractPxeTargetRepository::create(
+            $repository,
+            $this->repositories[$repository]['class'],
+            $this->repositories[$repository]['config'],
+            $this
+        );
+    }
+
+    public function hasRepostory(string $repository): bool
+    { return isset($this->repositories[$repository]); }
+
+    public function getRepositoryFinder($repository): Finder
+    {
+        if(!$this->hasRepostory($repository)){
+            throw new ToolOrRepositoryNotDefined($repository);
+        }
+
+        $path = self::concatPath([
+            $this->publicPath,
+            $this->rootDir,
+            $this->mediaDir,
+            $repository
+        ]);
+
+        $finder = new Finder();
+        return $finder->in($path);
     }
 
     public function getTool(string $tool) : string
@@ -40,6 +81,81 @@ class PxeResourceService
         }
 
         return $this->tools[$tool];
+    }
+
+    public static function scanForRepositories(array $repoList, string $mediaDir, string $basePath): array
+    {
+        $path = self::concatPath([$basePath, $mediaDir]);
+        $fs = new Filesystem();
+
+        if(!$fs->exists($path)){
+            throw new FileNotFoundException(null, 0, null, $path);
+        }
+
+        $repositories = [];
+        foreach ($repoList as $r => $v) {
+            try{
+
+                $rp = self::concatPath([$path, $r]);
+                if(!$fs->exists($rp)){
+                    throw new ToolOrRepositoryNotDefined(
+                        $r,
+                        new FileNotFoundException(null, 0, null, $rp)
+                    );
+                }
+
+                if(is_string($v)) $v = ['class' => $v];
+
+                if(!is_array($v)){
+                    throw new \InvalidArgumentException(
+                        'Expected an array type in "'.$r.'" repository definition'
+                    );
+                }
+
+                if(!isset($v['class']) || !is_string($v['class'])){
+                    throw new \InvalidArgumentException(
+                        'Class parameter must be a string with a valid repository'
+                    );
+                }
+
+                if(!class_exists($v['class'])){
+                    throw new \InvalidArgumentException(
+                        'Invalid repository "'.$v['class'].'" class',
+                        0,
+                        new \Exception('"'.$v['class'].'" class not defined')
+                    );
+                }
+
+                if(!is_subclass_of($v['class'],  AbstractPxeTargetRepository::class)){
+                    throw new \InvalidArgumentException(
+                        'Invalid repository "'.$v['class'].'" class',
+                        0,
+                        new \Exception(
+                            '"'.$v['class'].'" class is not a subclass of "'.
+                            AbstractPxeTargetRepository::class.'"'
+                        )
+                    );
+                }
+
+                if(!isset($v['config'])) $v['config'] = [];
+                if(!is_array($v['config'])){
+                    throw new \InvalidArgumentException(
+                        'Config parameter must be a array'
+                    );
+                }
+
+                $repositories[$r] = $v;
+            }
+            catch(\Exception $e){
+                throw new \RuntimeException(
+                    'Invalid definition for "'. $r. '" repository',
+                    0,
+                    $e
+                );
+            }
+        }
+
+        return $repositories;
     }
 
     public static function scanForTools(array $toolsList, string $toolsDir, string $basePath): array
@@ -64,4 +180,10 @@ class PxeResourceService
 
     public static function concatPath(array $paths): string
     { return implode('/', $paths); }
+
+    public static function validArchs(): array
+    { return ['i386', 'amd64', 'i386_amd64']; }
+
+    public static function validBootModes(): array
+    { return ['bios', 'efi']; }
 }
