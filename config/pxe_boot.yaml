@@ -11,3 +11,7 @@ parameters:
             - 'wimboot'
 
         repositories:
+            windows:
+                class: 'App\Repository\PxeWindowsRepository'
+                config:
+                    label: 'Windows {dist} NetInstall ({arch})'
