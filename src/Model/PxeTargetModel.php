@@ -2,6 +2,7 @@
 namespace App\Model;
 
 use App\Repository\AbstractPxeTargetRepository;
+use App\Service\PxeResourceService;
 
 class PxeTargetModel
 {
@@ -72,10 +73,9 @@ class PxeTargetModel
      * Push a image argument to the boot setup
      * @return self
      */
-    public function pushImgarg(string $value, string $key = '') : self
+    public function pushImgarg(string $value) : self
     {
-        if($key != '') $this->imgargs[$key] = $value;
-        else $this->imgargs[] = $value;
+        $this->imgargs[] = $value;
         return $this;
     }
 
@@ -83,8 +83,7 @@ class PxeTargetModel
      * Get the value of Label
      * @return string
      */
-    public function getLabel
-    () : string { return $this->label; }
+    public function getLabel() : string { return $this->label; }
 
     /**
      * Set a label to the boot entry menu
@@ -121,5 +120,29 @@ class PxeTargetModel
     public function getMode() : string
     {
         return $this->mode;
+    }
+
+    /**
+     * Get the value of repostory name
+     * @return string
+     */
+    public function getRepositoryName() : string
+    {
+        return $this->repository->getName();
+    }
+
+    /**
+     * Get the target directory base path
+     * @return string
+     */
+    public function getBasePath() : string
+    {
+        $r = $this->repository;
+        return PxeResourceService::concatPath([
+            '',
+            $r->getResourceService()->getRepositoryPath($r->getName(), false),
+            $this->getDist(),
+            $this->getArch()
+        ]);
     }
 }

@@ -28,16 +28,18 @@ class PxeResourceService
             $this->publicPath
         ]);
 
-        $basePath = self::concatPath([$this->publicPath, $this->rootDir]);
-
         $this->tools = self::scanForTools(
             $config['tools'],
-            $config['dirs']['tools'],
-            $basePath
+            self::concatPath([$this->rootDir, $config['dirs']['tools']]),
+            $this->publicPath
         );
 
         $this->mediaDir = $config['dirs']['media'];
-        $this->repositories = self::scanForRepositories($config['repositories'], $this->mediaDir, $basePath);
+        $this->repositories = self::scanForRepositories(
+            $config['repositories'],
+            self::concatPath([$this->rootDir, $this->mediaDir]),
+            $this->publicPath
+        );
     }
 
     public function getRepository(string $repository) : AbstractPxeTargetRepository
@@ -57,19 +59,13 @@ class PxeResourceService
     public function hasRepostory(string $repository): bool
     { return isset($this->repositories[$repository]); }
 
-    public function getRepositoryFinder($repository): Finder
+    public function getRepositoryFinder(string $repository): Finder
     {
         if(!$this->hasRepostory($repository)){
             throw new ToolOrRepositoryNotDefined($repository);
         }
 
-        $path = self::concatPath([
-            $this->publicPath,
-            $this->rootDir,
-            $this->mediaDir,
-            $repository
-        ]);
-
+        $path = $this->getRepositoryPath($repository, true);
         $finder = new Finder();
         return $finder->in($path);
     }
@@ -81,6 +77,27 @@ class PxeResourceService
         }
 
         return $this->tools[$tool];
+    }
+
+    public function getRepositoryPath(string $repository, bool $absolute = false): string
+    {
+        if(!$this->hasRepostory($repository)) return '';
+
+        if($absolute){
+            return self::concatPath([
+                $this->publicPath,
+                $this->rootDir,
+                $this->mediaDir,
+                $repository
+            ]);
+        }
+        else {
+            return self::concatPath([
+                $this->rootDir,
+                $this->mediaDir,
+                $repository
+            ]);
+        }
     }
 
     public static function scanForRepositories(array $repoList, string $mediaDir, string $basePath): array
