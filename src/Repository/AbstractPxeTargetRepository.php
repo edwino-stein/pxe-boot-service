@@ -44,6 +44,17 @@ abstract class AbstractPxeTargetRepository
         return $targets;
     }
 
+    public function findByDistAndMode(string $dist, string $mode) : array
+    {
+        $targets = [];
+        $archs = $this->getArchs($dist);
+        foreach ($archs as $a){
+            if(!$this->supportsBootMode($mode, $dist, $a)) continue;
+            $targets[] = $this->createModel($dist, $a, $mode);
+        }
+        return $targets;
+    }
+
     public function getDists() : array
     {
         $finder = $this->getResourceService()->getRepositoryFinder($this->getName());
