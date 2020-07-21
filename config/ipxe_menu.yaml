@@ -1,0 +1,13 @@
+parameters:
+    ipxe_menu:
+        title: 'PXE Boot Service (iPXE ${_arch_} in ${_mode_} boot mode)'
+
+        defines:
+            - 'set nfsServerRoot 192.168.2.10:/srv/pxe'
+
+        menu:
+            - {type: 'gap', label: 'Windows Systems'}
+            - {type: 'repository', target: 'windows', 'dist': ['10', '7']}
+            - {type: 'gap'}
+            - {type: 'gap', label: 'Linux Systems'}
+            - {type: 'repository', target: 'ubuntu'}
