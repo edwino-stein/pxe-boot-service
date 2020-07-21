@@ -1,6 +1,6 @@
 parameters:
     ipxe_menu:
-        title: 'PXE Boot Service (iPXE ${_arch_} in ${_mode_} boot mode)'
+        title: 'PXE Boot Service - iPXE ${version} (${_arch_}) - ${_mode_} boot mode'
 
         defines:
             - 'set nfsServerRoot 192.168.2.10:/srv/pxe'

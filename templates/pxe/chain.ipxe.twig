@@ -1,0 +1,32 @@
+#!ipxe
+
+##################
+# Global defines #
+##################
+
+{% for define in ipxe.getDefines %}
+{{ define|raw }}
+{% endfor %}
+
+##################
+#    Main menu   #
+##################
+
+:main
+    menu {{ ipxe.getMenuTitle|raw }}
+{% for item in ipxe.getMenuItens %}
+        {{ item|raw }}
+{% endfor %}
+    choose target && goto ${target}
+
+##################
+# Menu callbacks #
+##################
+
+{% for item,script in ipxe.getMenuCallbacks %}
+:{{ item|raw }}
+{% for line in script %}
+    {{ line|raw }}
+{% endfor %}
+
+{% endfor %}

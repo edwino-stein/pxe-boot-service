@@ -1,18 +1,28 @@
 <?php
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PxeController
+use App\Service\iPxeRenderService;
+
+/**
+ * @Route("/chain")
+ */
+class PxeController extends AbstractController
 {
     /**
-    * @Route("/chain")
+    * @Route(
+    *   "/{mode}.{_format}",
+    *   requirements={"mode": "bios|efi", "_format": "ipxe"}
+    * )
     */
-    public function index()
+    public function chain(string $mode, iPxeRenderService $ipxe)
     {
-        return new Response(
-            '<html><body>PXE</body></html>'
-        );
+        $ipxe->setup($mode);
+        $response = $this->render('pxe/chain.ipxe.twig', ['ipxe' => $ipxe]);
+        $response->headers->set('Content-Type', 'text/plain');
+        return $response;
     }
 }
