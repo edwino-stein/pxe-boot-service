@@ -1,27 +1,38 @@
 #!ipxe
 
-##################
-# Global defines #
-##################
+################################################################################
+################################ Global defines ################################
+################################################################################
 
 {% for define in ipxe.getDefines %}
 {{ define|raw }}
 {% endfor %}
 
-##################
-#    Main menu   #
-##################
+################################################################################
+################################## Main menu ###################################
+################################################################################
 
 :main
     menu {{ ipxe.getMenuTitle|raw }}
+
+        # Targets menu itens
 {% for item in ipxe.getMenuItens %}
         {{ item|raw }}
 {% endfor %}
+
+        # Default menu itens
+        item --gap
+        item --gap Miscellaneous
+        item shell iPXE shell
+        item restart_prompt Restart system
+        #item poweroff_prompt Poweroff system #poweroff disabled
+        item continue_prompt Continue to local boot
+
     choose target && goto ${target}
 
-##################
-# Menu callbacks #
-##################
+################################################################################
+################################ Menu callbacks ################################
+################################################################################
 
 {% for item,script in ipxe.getMenuCallbacks %}
 :{{ item|raw }}
@@ -30,3 +41,37 @@
 {% endfor %}
 
 {% endfor %}
+
+################################################################################
+############################## Default callbacks ###############################
+################################################################################
+
+:shell
+    echo Type 'exit' to get the back to the boot menu, or 'Ctr + Alt + Del' to restart.
+    shell
+    set menu-timeout 0
+    set submenu-timeout 0
+    goto main
+
+:restart_prompt
+    prompt --timeout ${_default_timeout_} Rebooting... || goto restart
+
+:restart
+    reboot
+
+:poweroff_prompt
+    prompt --timeout ${_default_timeout_} Shutting down... || goto poweroff
+
+:poweroff
+    poweroff
+
+:continue_prompt
+    prompt --timeout ${_default_timeout_} Continuing... || goto continue
+
+:continue
+    exit 0
+
+:failed
+    echo Failed on load resources or booting
+    prompt Press any key to back to boot menu
+    goto main

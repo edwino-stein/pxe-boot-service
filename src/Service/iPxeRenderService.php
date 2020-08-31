@@ -183,7 +183,8 @@ class iPxeRenderService
         $defines = [
             'set _mode_ ' . $this->mode,
             'set _baseurl_ ' . $this->baseUrl,
-            "cpuid --ext 29 && set _arch_ amd64 || set _arch_ i386"
+            "cpuid --ext 29 && set _arch_ amd64 || set _arch_ i386",
+            'set _default_timeout_ 2000'
         ];
 
         return array_merge($defines, $this->defines);
