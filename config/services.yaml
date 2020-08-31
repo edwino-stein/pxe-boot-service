@@ -8,6 +8,7 @@ parameters:
 imports:
     - { resource: 'pxe_boot.yaml'}
     - { resource: 'ipxe_menu.yaml'}
+    - { resource: 'windows_netinstall.yaml'}
 
 services:
     # default configuration for services in *this* file

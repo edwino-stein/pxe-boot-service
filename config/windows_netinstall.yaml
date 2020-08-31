@@ -1,0 +1,5 @@
+parameters:
+    windows_netinstall:
+        smbBasePath: 'pxe'
+        repository: 'windows'
+        setup: 'setup.exe'
