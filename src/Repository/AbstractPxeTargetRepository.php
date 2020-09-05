@@ -137,6 +137,14 @@ abstract class AbstractPxeTargetRepository
         else return '{target} {dist} boot ({arch})';
     }
 
+    protected function fileExists(string $file, string $dist, string $arch): bool
+    {
+        return $this->pxe->fileExistsInRepository(
+            PxeResourceService::concatPath([$dist, $arch, $file]),
+            $this->getName()
+        );
+    }
+
     protected static function encodeStr(string $str, array $args): string
     {
         return str_replace(

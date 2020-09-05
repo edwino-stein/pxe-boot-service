@@ -70,6 +70,18 @@ class PxeResourceService
         return $finder->in($path);
     }
 
+    public function fileExistsInRepository(string $file, string $repository) : bool
+    {
+        if(!$this->hasRepostory($repository)){
+            throw new ToolOrRepositoryNotDefined($repository);
+        }
+
+        $fs = new Filesystem();
+        $path = self::concatPath([$this->getRepositoryPath($repository), $file]);
+
+        return $fs->exists($path);
+    }
+
     public function getTool(string $tool) : string
     {
         if(!isset($this->tools[$tool])){
