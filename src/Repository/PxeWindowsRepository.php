@@ -33,6 +33,11 @@ class PxeWindowsRepository extends AbstractPxeTargetRepository
         return parent::setupModel($model);
     }
 
+    public function getDists() : array
+    {
+        return array_reverse(parent::getDists());
+    }
+
     protected function onSetup() : void
     {
         if(isset($this->getCfg()['netinstall']) && is_bool($this->getCfg()['netinstall'])){

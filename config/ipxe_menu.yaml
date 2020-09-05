@@ -7,7 +7,7 @@ parameters:
 
         menu:
             - {type: 'gap', label: 'Windows Systems'}
-            - {type: 'repository', target: 'windows', 'dist': ['10', '7']}
+            - {type: 'repository', target: 'windows'}
             - {type: 'gap'}
             - {type: 'gap', label: 'Linux Systems'}
             - {type: 'repository', target: 'ubuntu'}
