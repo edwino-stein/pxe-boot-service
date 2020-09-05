@@ -67,13 +67,19 @@ class iPxeRenderService
                 }
 
                 if($target['type'] == 'gap'){
-                    $menu[] = implode(
-                        ' ',
-                        array_merge(
-                            ['item', '--gap'],
-                            isset($target['label']) ? [$target['label']] : []
-                        )
-                    );
+
+                    $visibility = isset($target['visibility']) ? $target['visibility'] : $this->mode;
+
+                    if($visibility === $this->mode){
+                        $menu[] = implode(
+                            ' ',
+                            array_merge(
+                                ['item', '--gap'],
+                                isset($target['label']) ? [$target['label']] : []
+                            )
+                        );
+                    }
+
                     return;
                 }
             }
