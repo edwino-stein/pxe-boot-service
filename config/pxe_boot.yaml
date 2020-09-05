@@ -32,3 +32,23 @@ parameters:
                         - 'splash'
                         - 'quiet'
                         - '--'
+
+            memtest86p:
+                class: 'App\Repository\PxeMemdiskRepository'
+                config:
+                    label: 'Memtest86+ {dist} Memory Diagnostic Boot ({arch})'
+                    iso: 'boot.iso'
+                    imgargs:
+                        - memdisk
+                        - iso
+                        - raw
+
+            memtest86:
+                class: 'App\Repository\PxeMemdiskRepository'
+                config:
+                    label: 'Memtest86 {dist} Original Memory Diagnostic Boot ({arch})'
+                    iso: 'boot.iso'
+                    imgargs:
+                        - memdisk
+                        - iso
+                        - raw

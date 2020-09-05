@@ -11,3 +11,7 @@ parameters:
             - {type: 'gap'}
             - {type: 'gap', label: 'Linux Systems'}
             - {type: 'repository', target: 'ubuntu'}
+            - {type: 'gap', visibility: 'bios'}
+            - {type: 'gap', label: 'Tools', visibility: 'bios'}
+            - {type: 'repository', target: 'memtest86p'}
+            - {type: 'repository', target: 'memtest86'}
