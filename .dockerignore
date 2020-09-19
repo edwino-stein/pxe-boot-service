@@ -1,0 +1,12 @@
+*
+!/bin/
+!/config/
+!/src/
+!/templates/
+!/public/index.php
+!/public/.htaccess
+!/public/resources/.gitignore
+!/.env*
+!/composer.*
+!/symfony.lock
+!/apache-vhost.conf
