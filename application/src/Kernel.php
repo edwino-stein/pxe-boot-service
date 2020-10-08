@@ -35,4 +35,14 @@ class Kernel extends BaseKernel
             (require $path)($routes->withPath($path), $this);
         }
     }
+
+    public function getCacheDir()
+    {
+        return dirname(__DIR__).'/../var/'.$this->environment.'/cache';
+    }
+
+    public function getLogDir()
+    {
+        return dirname(__DIR__).'/../var/'.$this->environment.'/log';
+    }
 }

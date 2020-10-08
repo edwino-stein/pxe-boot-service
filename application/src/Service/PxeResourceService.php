@@ -78,7 +78,6 @@ class PxeResourceService
 
         $fs = new Filesystem();
         $path = self::concatPath([$this->getRepositoryPath($repository), $file]);
-
         return $fs->exists($path);
     }
 

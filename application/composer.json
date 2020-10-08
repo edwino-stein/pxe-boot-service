@@ -18,11 +18,13 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "bin-dir": "../vendor/bin",
+        "vendor-dir": "../vendor"
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src"
         }
     },
     "replace": {
