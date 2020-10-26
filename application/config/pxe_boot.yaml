@@ -27,7 +27,7 @@ parameters:
                         - 'initrd={initrd}'
                         - 'boot={boot}'
                         - 'netboot=nfs'
-                        - 'nfsroot=${nfsServerRoot}/{target}/{dist}/{arch}'
+                        - 'nfsroot=${_nfs_server_}:${_nfs_base_path_}/{target}/{dist}/{arch}'
                         - 'ip=dhcp'
                         - 'splash'
                         - 'quiet'
