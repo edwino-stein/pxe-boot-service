@@ -21,7 +21,11 @@ class iPxeRenderService
         $config = $container->getParameter('ipxe_menu');
 
         if(isset($config['title'])) $this->menuTitle = $config['title'];
-        if(is_array($config['defines'])) $this->defines = $config['defines'];
+
+        if(isset($config['defines']) && is_array($config['defines'])){
+            $this->defines = $config['defines'];
+        }
+
         if(is_array($config['menu'])) $this->menu = $config['menu'];
 
         $this->pes = $pes;

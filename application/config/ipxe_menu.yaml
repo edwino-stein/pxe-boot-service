@@ -1,10 +1,6 @@
 parameters:
     ipxe_menu:
         title: 'PXE Boot Service - iPXE ${version} (${_arch_}) - ${_mode_} boot mode'
-
-        defines:
-            - 'set nfsServerRoot ${next-server}:/srv/pxe'
-
         menu:
             - {type: 'gap', label: 'Windows Systems'}
             - {type: 'repository', target: 'windows'}
