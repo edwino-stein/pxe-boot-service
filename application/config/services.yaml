@@ -6,8 +6,8 @@
 parameters:
 
 imports:
-    - { resource: 'pxe_boot.yaml'}
     - { resource: 'ipxe_menu.yaml'}
+    - { resource: 'pxe/resources.yaml'}
     - { resource: 'windows_netinstall.yaml'}
 
 services:
@@ -31,6 +31,5 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    pxe_boot:
+    pxe_resources:
         class:  App\Service\PxeResourceService
-        arguments: ["@service_container"]

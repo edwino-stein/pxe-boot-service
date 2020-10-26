@@ -1,0 +1,10 @@
+parameters:
+    pxe:
+        dirs:
+            root: 'resources'
+            tools: 'tools'
+            media: 'media'
+        tools:
+            - 'memdisk'
+            - 'wimboot'
+        repositories: '%kernel.project_dir%/config/pxe/repositories'

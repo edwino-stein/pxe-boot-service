@@ -5,6 +5,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Yaml;
 
 use App\Exception\ToolOrRepositoryNotDefined;
 
@@ -21,7 +22,8 @@ class PxeResourceService
 
     public function __construct(ContainerInterface $container)
     {
-        $config = $container->getParameter('pxe_boot');
+        $config = $container->getParameter('pxe');
+
         $this->rootDir = $config['dirs']['root'];
         $this->publicPath = self::concatPath([
             $container->getParameter('kernel.project_dir'),
@@ -35,8 +37,23 @@ class PxeResourceService
         );
 
         $this->mediaDir = $config['dirs']['media'];
+
+        $finder = new Finder();
+        $finder ->in($config['repositories'])
+                ->files()
+                ->name('*.yaml')
+                ->name('*.yml');
+
+        $repositories = [];
+        foreach ($finder as $file) {
+            $repositories = array_merge(
+                $repositories,
+                Yaml::parseFile($file->getPathName())
+            );
+        }
+
         $this->repositories = self::scanForRepositories(
-            $config['repositories'],
+            $repositories,
             self::concatPath([$this->rootDir, $this->mediaDir]),
             $this->publicPath
         );
