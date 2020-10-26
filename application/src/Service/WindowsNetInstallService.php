@@ -29,6 +29,7 @@ class WindowsNetInstallService
     {
         $finder = $this->prs->getRepositoryFinder($this->repository);
         $finder ->path(PxeResourceService::concatPath([$dist, $arch, '']))
+                ->depth('<= 3')
                 ->files()
                 ->name($this->setup)
                 ->sortByName()
