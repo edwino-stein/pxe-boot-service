@@ -187,10 +187,15 @@ class iPxeRenderService
     public function getDefines(): array
     {
         $defines = [
+            "cpuid --ext 29 && set _arch_ amd64 || set _arch_ i386",
             'set _mode_ ' . $this->mode,
             'set _baseurl_ ' . $this->baseUrl,
-            "cpuid --ext 29 && set _arch_ amd64 || set _arch_ i386",
-            'set _default_timeout_ 2000'
+            'set _default_timeout_ 2000',
+            'set _next_server_ ' . (isset($_ENV['NEXT_SERVER']) ? $_ENV['NEXT_SERVER'] : '${next-server}'),
+            'set _smb_server_ ' . (isset($_ENV['SMB_SERVER']) ? $_ENV['SMB_SERVER'] : '${next-server}'),
+            'set _smb_base_path_ ' . (isset($_ENV['SMB_BASE_PATH']) ? $_ENV['SMB_BASE_PATH'] : ''),
+            'set _nfs_server_ ' . (isset($_ENV['NFS_SERVER']) ? $_ENV['NFS_SERVER'] : '${next-server}'),
+            'set _nfs_base_path_ ' . (isset($_ENV['NFS_BASE_PATH']) ? $_ENV['NFS_BASE_PATH'] : '/')
         ];
 
         return array_merge($defines, $this->defines);
