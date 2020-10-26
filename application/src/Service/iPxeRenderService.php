@@ -18,7 +18,7 @@ class iPxeRenderService
 
     public function __construct(ContainerInterface $container, PxeResourceService $pes)
     {
-        $config = $container->getParameter('ipxe_menu');
+        $config = $container->getParameter('pxe_menu');
 
         if(isset($config['title'])) $this->menuTitle = $config['title'];
 

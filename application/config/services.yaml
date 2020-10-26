@@ -6,8 +6,9 @@
 parameters:
 
 imports:
-    - { resource: 'ipxe_menu.yaml'}
     - { resource: 'pxe/resources.yaml'}
+    - { resource: 'pxe_menu.yaml'}
+    - { resource: 'pxe_menu.local.yaml', ignore_errors: not_found}
     - { resource: 'windows_netinstall.yaml'}
 
 services:

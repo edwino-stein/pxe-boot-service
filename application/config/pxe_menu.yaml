@@ -1,5 +1,5 @@
 parameters:
-    ipxe_menu:
+    pxe_menu:
         title: 'PXE Boot Service - iPXE ${version} (${_arch_}) - ${_mode_} boot mode'
         menu:
             - {type: 'gap', label: 'Windows Systems'}
