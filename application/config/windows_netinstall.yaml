@@ -1,5 +1,6 @@
 parameters:
     windows_netinstall:
-        smbBasePath: 'pxe'
+        smbServer: '%env(resolve:SMB_SERVER)%'
+        smbBasePath: '%env(resolve:SMB_BASE_PATH)%'
         repository: 'windows'
         setup: 'setup.exe'
