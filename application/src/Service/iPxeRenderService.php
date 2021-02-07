@@ -2,6 +2,7 @@
 namespace App\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Routing\RequestContext;
 use App\Service\PxeResourceService;
 use App\Model\PxeTargetModel;
 
@@ -16,7 +17,7 @@ class iPxeRenderService
 
     protected $targets = [];
 
-    public function __construct(ContainerInterface $container, PxeResourceService $pes)
+    public function __construct(ContainerInterface $container, PxeResourceService $pes, RequestContext $rc)
     {
         $config = $container->getParameter('pxe_menu');
 
@@ -29,6 +30,7 @@ class iPxeRenderService
         if(is_array($config['menu'])) $this->menu = $config['menu'];
 
         $this->pes = $pes;
+        $this->baseUrl = $rc->getBaseUrl();
     }
 
     public function setup($mode): void
