@@ -25,4 +25,12 @@ class PxeController extends AbstractController
         $response->headers->set('Content-Type', 'text/plain');
         return $response;
     }
+
+    /**
+    * @Route("/teste")
+    */
+    public function teste(iPxeRenderService $prs){
+        var_dump($prs);
+        return new Response('teste');
+    }
 }
